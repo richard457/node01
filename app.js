@@ -17,6 +17,7 @@ var Event = require('./routes/events');
 var users = require('./routes/users');
 var session = require('express-session');
 var config = require('./Config/Config');
+var env = process.env;
 
 var app = express();
 require('./Config/passport')(passport);
