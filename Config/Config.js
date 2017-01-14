@@ -1,7 +1,7 @@
 'use strict'
 const Config = {
-  'DBSecret': 'AKIAICUC6IQRPZYD3AHQ',
-  'DBName': 'wasac',
+  'DBSecret': 'bebeto',
+  'DBName': 'staps',
   'ip': 'http://35.164.250.103/',
   'secret': '12324434247897442',
   'S3AccessKey': 'AKIAICUC6IQRPZYD3AHQ',
