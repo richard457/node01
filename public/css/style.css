@@ -83,7 +83,9 @@ body {
 font-family: 'Merriweather', serif;
   overflow-x: hidden !important;
 }
-
+.bgwhite {
+  background-color: #fff;
+}
 .scrolloff {
     pointer-events: none;
 }
@@ -289,7 +291,7 @@ img{
 }
 .slider_caption h2 {
   color: #f2f2f2;
-  font-size: 33px;
+  font-size: 25px;
   background-color: rgba(16, 35, 69, 0.6);
   padding: 8px;
   margin-bottom: 5px;
@@ -297,7 +299,7 @@ img{
 }
 .slider_caption p {
   background-color: rgba(16, 35, 69, 0.6);
-  color: #cbcace;
+  color: #f2f2f2;
   font-family: "Varela",sans-serif;
   font-size: 15px;
   font-weight: 600;
@@ -483,7 +485,7 @@ img{
   border-bottom: 1px solid #e0e0e0;
 }
 .blocktitle h1{
-  font-size: 24px; line-height: 30px; color: #2bbbdf;font-family: 'open_sansextrabold'; text-transform: uppercase;
+  font-size: 24px; line-height: 30px; color: #102345;font-family: 'open_sansextrabold'; text-transform: uppercase;
 }
 .blocktitle h2{
   font-size: 24px; line-height: 30px; color: #2bbbdf;font-family: 'open_sanslight'; font-weight: normal;
@@ -1005,7 +1007,7 @@ div[data-dimension] {
 /*--------------------*/
 
 #studentsTestimonial{
-  background-color: #f6f6f6;
+  background-color: #fff;
   float: left;
   display: inline;
   width: 100%;
@@ -1116,6 +1118,7 @@ div[data-dimension] {
 }
 .single_footer_widget>p{
   color: #fff;
+  font-family: open_sansregular !important;
 }
 .footer_widget_nav li a {
   font-size: 15px;
