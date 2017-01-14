@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http'),
 var exphbs = require('express-handlebars');
+var db = require('./Database/Db.js');
 var path = require('path');
 var moment = require('moment');
 var favicon = require('static-favicon');
