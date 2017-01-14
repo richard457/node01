@@ -1,5 +1,5 @@
 var express = require('express');
-var http = require('http'),
+var http = require('http');
 var exphbs = require('express-handlebars');
 var db = require('./Database/Db.js');
 var path = require('path');
