@@ -1,43 +1,108 @@
-const http         = require('http'),
-      fs           = require('fs'),
-      path         = require('path'),
-      contentTypes = require('./utils/content-types'),
-      sysInfo      = require('./utils/sys-info'),
-      env          = process.env;
+var express = require('express');
+var http = require('http'),
+var exphbs = require('express-handlebars');
+var path = require('path');
+var moment = require('moment');
+var favicon = require('static-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var flash = require('connect-flash');
+var routes = require('./routes/index');
+var Auth = require('./routes/auth');
+var Post = require('./routes/post');
+var Event = require('./routes/events');
+var users = require('./routes/users');
+var session = require('express-session');
+var config = require('./Config/Config');
 
-let server = http.createServer(function (req, res) {
-  let url = req.url;
-  if (url == '/') {
-    url += 'index.html';
-  }
-
-  // IMPORTANT: Your application HAS to respond to GET /health with status 200
-  //            for OpenShift health monitoring
-
-  if (url == '/health') {
-    res.writeHead(200);
-    res.end();
-  } else if (url == '/info/gen' || url == '/info/poll') {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Cache-Control', 'no-cache, no-store');
-    res.end(JSON.stringify(sysInfo[url.slice(6)]()));
-  } else {
-    fs.readFile('./static' + url, function (err, data) {
-      if (err) {
-        res.writeHead(404);
-        res.end('Not found');
-      } else {
-        let ext = path.extname(url).slice(1);
-        res.setHeader('Content-Type', contentTypes[ext]);
-        if (ext === 'html') {
-          res.setHeader('Cache-Control', 'no-cache, no-store');
-        }
-        res.end(data);
+var app = express();
+require('./Config/passport')(passport);
+// view engine setup
+var hbs = exphbs.create({
+  helpers: {
+    limitTitle: function(title){
+      var t = String(title);
+      if(t.length > 30){
+        t = t.substring(0,31) + '...';
       }
-    });
-  }
+      return t;
+    },
+    limitText: function(title){
+      var t = String(title);
+      if(t.length > 256){
+        t = t.substring(0,256) + '...';
+      }
+      return t;
+    },
+    momentDate: function(date){
+      var d = new Date(String(date));
+      d = moment(d).format("ddd, MMM Do YYYY");
+      return d;
+    },
+    active: function(link,route){
+      var route = String(route);
+      var link = String(link);
+      var response =   link == route ? 'active': 'inactive';
+      return response;
+    }
+  },
+  partialsDir: "views/partials/",
+  partials: {
+    header: 'header',
+  },
+  extname: ".html",
+})
+app.set('views', path.join(__dirname, 'views'));
+//app.enable('view cache');
+app.set('view engine', '.html');
+app.engine('.html',hbs.engine);
+
+app.use(favicon());
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({secret: config.secret}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+app.use('/auth', Auth(passport));
+app.use('/post', Post);
+app.use('/event', Event);
+app.use('/', routes);
+//app.use('/users', users);
+
+/// catch 404 and forwarding to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
+/// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render("404");
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render("404");
+});
+
+var server = http.createServer(app);
 server.listen(env.NODE_PORT || 3000, env.NODE_IP || 'localhost', function () {
   console.log(`Application worker ${process.pid} started...`);
 });
