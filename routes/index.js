@@ -41,7 +41,7 @@ router.get('/who-we-are', function(req, res) {
 router.get('/EAUDC', function(req, res) {
   res.render("eaudc",{link: 'what-we-do' });
 });
-router.get('/NFUDC', function(req, res) {
+router.get('/NFDC', function(req, res) {
   res.render("nfudc",{link: 'what-we-do' });
 });
 router.get('/adjudication', function(req, res) {
